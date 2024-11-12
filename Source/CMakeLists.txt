@@ -10,7 +10,7 @@ set( FREEIMAGE_VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${F
 project( FreeImage VERSION ${FREEIMAGE_VERSION} LANGUAGES C CXX )
 
 if(MSVC)
-    set(CMAKE_C_FLAGS "/DWIN32 /D_WINDOWS")
+    set(CMAKE_C_FLAGS "/DWIN32")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DWIN32 /Zc:__cplusplus")
 endif()
 
@@ -223,6 +223,7 @@ set_property(TARGET LibWebP PROPERTY CXX_STANDARD 14)
 set_property(TARGET OpenEXR PROPERTY CXX_STANDARD 14)
 set_property(TARGET ZLibFreeImage PROPERTY CXX_STANDARD 14)
 
+# MSVC 2019 does not seem to support c11 nicely. use it for all other compilers and msvc 2022
 if (NOT (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION LESS 1930))
     set_property(TARGET FreeImage PROPERTY C_STANDARD 11)
     set_property(TARGET FreeImageLib PROPERTY C_STANDARD 11)
