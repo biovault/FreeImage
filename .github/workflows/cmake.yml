@@ -92,8 +92,8 @@ jobs:
         CC: ${{ matrix.config.cc }}
         CXX: ${{ matrix.config.cxx }}
       run: |
-        sudo xcode-select --switch /Applications/Xcode_${{ matrix.config.xcode_version }}.app
-        xcodebuild -version
+        sudo xcode-select --switch /Applications/Xcode_${{ matrix.config.xcode_version }}.app/Contents/Developer
+        xcode-select --print-path
         cmake -B ${{github.workspace}}/build -G "${{ matrix.config.generator }}" -DCMAKE_BUILD_TYPE=${{matrix.build_type }}
 
     - name: Build
