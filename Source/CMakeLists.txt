@@ -214,13 +214,17 @@ target_include_directories( FreeImageLib
 	PUBLIC ./
 )
 
-if(UNIX AND NOT APPLE)
-    set_property(TARGET FreeImage PROPERTY POSITION_INDEPENDENT_CODE ON)
-endif()
-
 set(TARGET_LIST FreeImage FreeImageLib LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLibFreeImage)
 
-# Enforece standards
+# position independent code on linux
+if(UNIX AND NOT APPLE)
+    foreach(target IN LISTS TARGET_LIST)
+        set_property(TARGET ${target} PROPERTY POSITION_INDEPENDENT_CODE ON)
+    endforeach()
+    
+endif()
+
+# Enforece c and cxx standards
 foreach(target IN LISTS TARGET_LIST)
     set_property(TARGET ${target} PROPERTY CXX_STANDARD 14)
 endforeach()
@@ -245,4 +249,3 @@ if(APPLE)
         target_compile_definitions(${target} PRIVATE NO_LCMS)
     endforeach()
 endif()
-
