@@ -9,6 +9,10 @@ set( FREEIMAGE_VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${F
 
 project( FreeImage VERSION ${FREEIMAGE_VERSION} LANGUAGES C CXX )
 
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:__cplusplus")
+endif()
+
 add_subdirectory( ZLibFreeImage ) # ZLibFreeImage is a dependency of other libraries, so make sure it's loaded first.
 add_subdirectory( LibJPEG )
 add_subdirectory( LibJXR )
