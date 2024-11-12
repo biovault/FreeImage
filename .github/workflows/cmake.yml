@@ -47,17 +47,19 @@ jobs:
           }
         - {
             name: "macOS 14 Xcode 15",
-            os: macos-14,
+            os: macos-14-large,
             cc: "clang",
             cxx: "clang++",
-            generator: "Xcode"
+            generator: "Xcode",
+            xcode_version: "15.4"
           }
         - {
             name: "macOS 13 Xcode 14",
             os: macos-13,
             cc: "clang",
             cxx: "clang++",
-            generator: "Xcode"
+            generator: "Xcode",
+            xcode_version: "14.3.1"
           }
         build_type: [Debug, Release]
 
@@ -77,11 +79,21 @@ jobs:
         cmake -B ${{github.workspace}}/build -G "${{ matrix.config.generator }}" -DCMAKE_BUILD_TYPE=${{matrix.build_type }} -A x64
 
     - name: Configure
-      if: runner.os != 'Windows'
+      if: runner.os == 'Linux'
       env:
         CC: ${{ matrix.config.cc }}
         CXX: ${{ matrix.config.cxx }}
       run: |
+        cmake -B ${{github.workspace}}/build -G "${{ matrix.config.generator }}" -DCMAKE_BUILD_TYPE=${{matrix.build_type }}
+
+    - name: Configure
+      if: runner.os == 'macOS'
+      env:
+        CC: ${{ matrix.config.cc }}
+        CXX: ${{ matrix.config.cxx }}
+      run: |
+        sudo xcode-select --switch /Applications/Xcode_${{ matrix.config.xcode_version }}.app
+        xcodebuild -version
         cmake -B ${{github.workspace}}/build -G "${{ matrix.config.generator }}" -DCMAKE_BUILD_TYPE=${{matrix.build_type }}
 
     - name: Build
