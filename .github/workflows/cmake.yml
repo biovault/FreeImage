@@ -50,14 +50,14 @@ jobs:
             os: macos-14,
             cc: "clang",
             cxx: "clang++",
-            generator: "Xcode 15"
+            generator: "Xcode"
           }
         - {
             name: "macOS 13 Xcode 14",
             os: macos-13,
             cc: "clang",
             cxx: "clang++",
-            generator: "Xcode 14"
+            generator: "Xcode"
           }
         build_type: [Debug, Release]
 
