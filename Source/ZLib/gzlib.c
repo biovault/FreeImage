@@ -5,6 +5,11 @@
 
 #include "gzguts.h"
 
+#ifdef __APPLE__
+    #define _LARGEFILE64_SOURCE     /* See feature_test_macros(7) */
+    #include <sys/types.h>
+    #include <unistd.h>
+#endif
 #if defined(_WIN32) && !defined(__BORLANDC__) && !defined(__MINGW32__)
 #  define LSEEK _lseeki64
 #else
