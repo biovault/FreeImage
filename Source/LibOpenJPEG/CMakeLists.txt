@@ -63,7 +63,7 @@ set( SOURCE_FILES
 #	tpix_manager.c
 )
 
-add_library( LibOpenJPEG ${HEADER_FILES} ${SOURCE_FILES} )
+add_library( LibOpenJPEG STATIC ${HEADER_FILES} ${SOURCE_FILES} )
 
 target_compile_definitions( LibOpenJPEG 
 	PUBLIC OPJ_STATIC
