@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.23.0 ) # Current version of CMake when this file was created.
 
-option( FREEIMAGE_BUILD_EXAMPLES "Build examples for FreeImage." ON )
+option( FREEIMAGE_BUILD_EXAMPLES "Build examples for FreeImage." OFF )
 option( FREEIMAGE_BUILD_TESTING "Build test project for FreeImage" OFF )
 
 # Use solution folders to organize projects.
