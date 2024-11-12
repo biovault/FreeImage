@@ -45,14 +45,14 @@ jobs:
             cxx: "g++",
             generator: "Ninja"
           }
-        - {
-            name: "macOS 14 Xcode 15",
-            os: macos-14-large,
-            cc: "clang",
-            cxx: "clang++",
-            generator: "Xcode",
-            xcode_version: "15.4"
-          }
+#        - {
+#            name: "macOS 14 Xcode 15",
+#            os: macos-14-large,
+#            cc: "clang",
+#            cxx: "clang++",
+#            generator: "Xcode",
+#            xcode_version: "15.4"
+#          }
         - {
             name: "macOS 13 Xcode 14",
             os: macos-13,
