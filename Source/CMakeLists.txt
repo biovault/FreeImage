@@ -11,7 +11,7 @@ project( FreeImage VERSION ${FREEIMAGE_VERSION} LANGUAGES C CXX )
 
 if(MSVC)
     set(CMAKE_C_FLAGS "/DWIN32")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DWIN32 /Zc:__cplusplus")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DWIN32 /EHsc /Zc:__cplusplus")
 endif()
 
 add_subdirectory( ZLibFreeImage ) # ZLibFreeImage is a dependency of other libraries, so make sure it's loaded first.
@@ -195,6 +195,10 @@ target_include_directories( FreeImage
 	PUBLIC ./
 )
 
+if(UNIX AND NOT APPLE)  # Only on Linux
+    set_property(TARGET FreeImage PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
 # Create static library
 add_library( FreeImageLib STATIC ${ALL_FILES} )
 
@@ -210,30 +214,35 @@ target_include_directories( FreeImageLib
 	PUBLIC ./
 )
 
+if(UNIX AND NOT APPLE)
+    set_property(TARGET FreeImage PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
+set(TARGET_LIST FreeImage FreeImageLib LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLibFreeImage)
+
 # Enforece standards
-set_property(TARGET FreeImage PROPERTY CXX_STANDARD 14)
-set_property(TARGET FreeImageLib PROPERTY CXX_STANDARD 14)
-set_property(TARGET LibJPEG PROPERTY CXX_STANDARD 14)
-set_property(TARGET LibJXR PROPERTY CXX_STANDARD 14)
-set_property(TARGET LibOpenJPEG PROPERTY CXX_STANDARD 14)
-set_property(TARGET LibPNG PROPERTY CXX_STANDARD 14)
-set_property(TARGET LibRaw PROPERTY CXX_STANDARD 14)
-set_property(TARGET LibTIFF4 PROPERTY CXX_STANDARD 14)
-set_property(TARGET LibWebP PROPERTY CXX_STANDARD 14)
-set_property(TARGET OpenEXR PROPERTY CXX_STANDARD 14)
-set_property(TARGET ZLibFreeImage PROPERTY CXX_STANDARD 14)
+foreach(target IN LISTS ARGN)
+    set_property(TARGET ${target} PROPERTY CXX_STANDARD 14)
+endforeach()
 
 # MSVC 2019 does not seem to support c11 nicely. use it for all other compilers and msvc 2022
 if (NOT (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION LESS 1930))
-    set_property(TARGET FreeImage PROPERTY C_STANDARD 11)
-    set_property(TARGET FreeImageLib PROPERTY C_STANDARD 11)
-    set_property(TARGET LibJPEG PROPERTY C_STANDARD 11)
-    set_property(TARGET LibJXR PROPERTY C_STANDARD 11)
-    set_property(TARGET LibOpenJPEG PROPERTY C_STANDARD 11)
-    set_property(TARGET LibPNG PROPERTY C_STANDARD 11)
-    set_property(TARGET LibRaw PROPERTY C_STANDARD 11)
-    set_property(TARGET LibTIFF4 PROPERTY C_STANDARD 11)
-    set_property(TARGET LibWebP PROPERTY C_STANDARD 11)
-    set_property(TARGET OpenEXR PROPERTY C_STANDARD 11)
-    set_property(TARGET ZLibFreeImage PROPERTY C_STANDARD 11)
+    foreach(target IN LISTS ARGN)
+        set_property(TARGET ${target} PROPERTY C_STANDARD 14)
+    endforeach()
 endif()
+
+# control exception handling and symbol visibility 
+if(UNIX)
+    foreach(target IN LISTS ARGN)
+        target_compile_options(${target} PRIVATE -fexceptions -fvisibility=hidden)
+        target_compile_definitions(${target} PRIVATE __ANSI__)
+    endforeach()
+endif()
+
+if(APPLE)
+    foreach(target IN LISTS ARGN)
+        target_compile_definitions(${target} PRIVATE NO_LCMS)
+    endforeach()
+endif()
+
