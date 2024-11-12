@@ -221,27 +221,27 @@ endif()
 set(TARGET_LIST FreeImage FreeImageLib LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLibFreeImage)
 
 # Enforece standards
-foreach(target IN LISTS ARGN)
+foreach(target IN LISTS TARGET_LIST)
     set_property(TARGET ${target} PROPERTY CXX_STANDARD 14)
 endforeach()
 
 # MSVC 2019 does not seem to support c11 nicely. use it for all other compilers and msvc 2022
 if (NOT (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION LESS 1930))
-    foreach(target IN LISTS ARGN)
-        set_property(TARGET ${target} PROPERTY C_STANDARD 14)
+    foreach(target IN LISTS TARGET_LIST)
+        set_property(TARGET ${target} PROPERTY C_STANDARD 11)
     endforeach()
 endif()
 
 # control exception handling and symbol visibility 
 if(UNIX)
-    foreach(target IN LISTS ARGN)
+    foreach(target IN LISTS TARGET_LIST)
         target_compile_options(${target} PRIVATE -fexceptions -fvisibility=hidden)
         target_compile_definitions(${target} PRIVATE __ANSI__)
     endforeach()
 endif()
 
 if(APPLE)
-    foreach(target IN LISTS ARGN)
+    foreach(target IN LISTS TARGET_LIST)
         target_compile_definitions(${target} PRIVATE NO_LCMS)
     endforeach()
 endif()
