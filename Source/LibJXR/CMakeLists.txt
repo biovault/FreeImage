@@ -78,5 +78,5 @@ add_library( LibJXR STATIC
 )
 
 target_include_directories( LibJXR
-	PUBLIC image/sys jxrgluelib
+	PUBLIC image/sys jxrgluelib common/include
 )
