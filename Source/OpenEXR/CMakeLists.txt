@@ -296,7 +296,7 @@ source_group( TREE ${CMAKE_CURRENT_SOURCE_DIR} PREFIX "Source Files" FILES ${SOU
 add_library( OpenEXR STATIC ${HEADER_FILES} ${SOURCE_FILES} )
 
 target_link_libraries( OpenEXR
-	PRIVATE ZLib
+	PRIVATE ZLibFreeImage
 )
 
 target_include_directories( OpenEXR

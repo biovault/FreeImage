@@ -69,5 +69,5 @@ target_include_directories( LibTIFF4
 )
 
 target_link_libraries( LibTIFF4
-	PRIVATE ZLib LibJPEG
+	PRIVATE ZLibFreeImage LibJPEG
 )

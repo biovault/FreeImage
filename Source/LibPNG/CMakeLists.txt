@@ -40,5 +40,5 @@ set( SOURCE_FILES
 add_library( LibPNG STATIC ${HEADER_FILES} ${SOURCE_FILES} )
 
 target_link_libraries( LibPNG
-	PUBLIC ZLib
+	PUBLIC ZLibFreeImage
 )

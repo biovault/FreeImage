@@ -9,7 +9,7 @@ set( FREEIMAGE_VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${F
 
 project( FreeImage VERSION ${FREEIMAGE_VERSION} LANGUAGES C CXX )
 
-add_subdirectory( ZLib ) # ZLib is a dependency of other libraries, so make sure it's loaded first.
+add_subdirectory( ZLibFreeImage ) # ZLibFreeImage is a dependency of other libraries, so make sure it's loaded first.
 add_subdirectory( LibJPEG )
 add_subdirectory( LibJXR )
 add_subdirectory( LibOpenJPEG )
@@ -178,7 +178,7 @@ set( ALL_FILES
 add_library( FreeImage SHARED ${ALL_FILES} )
 
 target_link_libraries( FreeImage
-	PUBLIC LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLib
+	PUBLIC LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLibFreeImage
 )
 
 target_compile_definitions( FreeImage
@@ -194,7 +194,7 @@ target_include_directories( FreeImage
 add_library( FreeImageLib STATIC ${ALL_FILES} )
 
 target_link_libraries( FreeImageLib
-	PUBLIC LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLib
+	PUBLIC LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLibFreeImage
 )
 
 target_compile_definitions( FreeImageLib
@@ -216,7 +216,7 @@ set_property(TARGET LibRaw PROPERTY CXX_STANDARD 14)
 set_property(TARGET LibTIFF4 PROPERTY CXX_STANDARD 14)
 set_property(TARGET LibWebP PROPERTY CXX_STANDARD 14)
 set_property(TARGET OpenEXR PROPERTY CXX_STANDARD 14)
-set_property(TARGET ZLib PROPERTY CXX_STANDARD 14)
+set_property(TARGET ZLibFreeImage PROPERTY CXX_STANDARD 14)
 
 set_property(TARGET FreeImage PROPERTY C_STANDARD 11)
 set_property(TARGET FreeImageLib PROPERTY C_STANDARD 11)
@@ -228,4 +228,4 @@ set_property(TARGET LibRaw PROPERTY C_STANDARD 11)
 set_property(TARGET LibTIFF4 PROPERTY C_STANDARD 11)
 set_property(TARGET LibWebP PROPERTY C_STANDARD 11)
 set_property(TARGET OpenEXR PROPERTY C_STANDARD 11)
-set_property(TARGET ZLib PROPERTY C_STANDARD 11)
+set_property(TARGET ZLibFreeImage PROPERTY C_STANDARD 11)

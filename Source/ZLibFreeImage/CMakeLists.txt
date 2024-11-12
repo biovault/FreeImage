@@ -6,7 +6,7 @@ set( ZLIB_VERSION_MINOR 2 )
 set( ZLIB_VERSION_PATCH 11 )
 set( ZLIB_VERSION ${ZLIB_VERSION_MAJOR}.${ZLIB_VERSION_MINOR}.${ZLIB_VERSION_PATCH} )
 
-project( ZLib VERSION ${ZLIB_VERSION} LANGUAGES C )
+project( ZLibFreeImage VERSION ${ZLIB_VERSION} LANGUAGES C )
 
 set( HEADER_FILES
 	crc32.h
@@ -40,9 +40,9 @@ set( SOURCE_FILES
 	zutil.c
 )
 
-add_library( ZLib STATIC ${HEADER_FILES} ${SOURCE_FILES} )
+add_library( ZLibFreeImage STATIC ${HEADER_FILES} ${SOURCE_FILES} )
 
-target_include_directories( ZLib
+target_include_directories( ZLibFreeImage
 	PUBLIC ./
 )
 
