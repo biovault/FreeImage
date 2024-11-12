@@ -45,6 +45,20 @@ jobs:
             cxx: "g++",
             generator: "Ninja"
           }
+        - {
+            name: "macOS 14 Xcode 15",
+            os: macos-14,
+            cc: "clang",
+            cxx: "clang++",
+            generator: "Xcode 15"
+          }
+        - {
+            name: "macOS 13 Xcode 14",
+            os: macos-13,
+            cc: "clang",
+            cxx: "clang++",
+            generator: "Xcode 14"
+          }
         build_type: [Debug, Release]
 
     steps:
