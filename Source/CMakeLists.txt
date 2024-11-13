@@ -265,7 +265,7 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|Arm|ARM|aarch64|AAarch64|AARCH64)")
 endif()
 
 # Temporary workaround for potential issues with clang, see https://github.com/Homebrew/homebrew-core/blob/b5d2dd8e69b2729015a2855060c1f2dfa303dbdc/Formula/f/freeimage.rb
-if(CMAKE_CXX_COMPILER_ID STREQUAL MATCHES "^(Clang|AppleClang)" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 15)
+if(CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|AppleClang)" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 15)
     message(STATUS "[CLANG>=15] Using: -Wno-implicit-function-declaration")
     foreach(target IN LISTS TARGET_LIST)
         target_compile_options(${target} PRIVATE -Wno-implicit-function-declaration)
