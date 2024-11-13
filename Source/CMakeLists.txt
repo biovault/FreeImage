@@ -249,3 +249,10 @@ if(APPLE)
         target_compile_definitions(${target} PRIVATE NO_LCMS)
     endforeach()
 endif()
+
+# Temporary workaround for ARM, see https://github.com/Homebrew/homebrew-core/blob/b5d2dd8e69b2729015a2855060c1f2dfa303dbdc/Formula/f/freeimage.rb
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|Arm|ARM|aarch64|AAarch64|AARCH64)"))
+    foreach(target IN LISTS TARGET_LIST)
+        target_compile_definitions(${target} PRIVATE PNG_ARM_NEON_OPT=0)
+    endforeach()
+endif()
