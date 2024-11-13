@@ -38,14 +38,14 @@ jobs:
             cxx: "g++",
             generator: "Ninja"
           }
-          - {
+        - {
             name: "Ubuntu 22 GCC 11",
             os: ubuntu-22.04,
             cc: "gcc",
             cxx: "g++",
             generator: "Ninja"
           }
-          - {
+        - {
             name: "Ubuntu 24 GCC 13",
             os: ubuntu-24.04,
             cc: "gcc",
@@ -61,21 +61,21 @@ jobs:
             xcode_version: "14.3.1"
           }
         - {
-          name: "macOS 14 Xcode 15 (ARM)",
-          os: macos-14,
-          cc: "clang",
-          cxx: "clang++",
-          generator: "Xcode",
-          xcode_version: "15.4"
-        }
+            name: "macOS 14 Xcode 15 (ARM)",
+            os: macos-14,
+            cc: "clang",
+            cxx: "clang++",
+            generator: "Xcode",
+            xcode_version: "15.4"
+          }
         - {
-          name: "macOS 15 Xcode 16 (ARM)",
-          os: macos-15,
-          cc: "clang",
-          cxx: "clang++",
-          generator: "Xcode",
-          xcode_version: "16.0"
-        }
+            name: "macOS 15 Xcode 16 (ARM)",
+            os: macos-15,
+            cc: "clang",
+            cxx: "clang++",
+            generator: "Xcode",
+            xcode_version: "16.0"
+          }
         build_type: [Debug, Release]
 
     steps:
