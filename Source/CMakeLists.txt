@@ -216,28 +216,33 @@ target_include_directories( FreeImageLib
 
 set(TARGET_LIST FreeImage FreeImageLib LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLibFreeImage)
 
-# position independent code on linux
-if(UNIX AND NOT APPLE)
-    foreach(target IN LISTS TARGET_LIST)
-        set_property(TARGET ${target} PROPERTY POSITION_INDEPENDENT_CODE ON)
-    endforeach()
-    
-endif()
-
 # Enforece c and cxx standards
+message(STATUS "Setting: CXX_STANDARD 14")
 foreach(target IN LISTS TARGET_LIST)
     set_property(TARGET ${target} PROPERTY CXX_STANDARD 14)
 endforeach()
 
 # MSVC 2019 does not seem to support c11 nicely. use it for all other compilers and msvc 2022
 if (NOT (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION LESS 1930))
+    message(STATUS "Setting: C_STANDARD 11")
     foreach(target IN LISTS TARGET_LIST)
         set_property(TARGET ${target} PROPERTY C_STANDARD 11)
     endforeach()
 endif()
 
+# position independent code on linux
+if(UNIX AND NOT APPLE)
+    message(STATUS "[LINUX ] Setting: POSITION_INDEPENDENT_CODE ON")
+    foreach(target IN LISTS TARGET_LIST)
+        set_property(TARGET ${target} PROPERTY POSITION_INDEPENDENT_CODE ON)
+    endforeach()
+    
+endif()
+
 # control exception handling and symbol visibility 
 if(UNIX)
+    message(STATUS "[UNIX] Setting: __ANSI__")
+    message(STATUS "[UNIX] Using: -fexceptions -fvisibility=hidden")
     foreach(target IN LISTS TARGET_LIST)
         target_compile_options(${target} PRIVATE -fexceptions -fvisibility=hidden)
         target_compile_definitions(${target} PRIVATE __ANSI__)
@@ -245,6 +250,7 @@ if(UNIX)
 endif()
 
 if(APPLE)
+    message(STATUS "[APPLE] Setting: NO_LCMS")
     foreach(target IN LISTS TARGET_LIST)
         target_compile_definitions(${target} PRIVATE NO_LCMS)
     endforeach()
@@ -252,6 +258,7 @@ endif()
 
 # Temporary workaround for ARM, see https://github.com/Homebrew/homebrew-core/blob/b5d2dd8e69b2729015a2855060c1f2dfa303dbdc/Formula/f/freeimage.rb
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|Arm|ARM|aarch64|AAarch64|AARCH64)")
+    message(STATUS "[ARM] Setting: PNG_ARM_NEON_OPT=0")
     foreach(target IN LISTS TARGET_LIST)
         target_compile_definitions(${target} PRIVATE PNG_ARM_NEON_OPT=0)
     endforeach()
@@ -259,6 +266,7 @@ endif()
 
 # Temporary workaround for potential issues with clang, see https://github.com/Homebrew/homebrew-core/blob/b5d2dd8e69b2729015a2855060c1f2dfa303dbdc/Formula/f/freeimage.rb
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 15)
+    message(STATUS "[CLANG>=15] Using: -Wno-implicit-function-declaration")
     foreach(target IN LISTS TARGET_LIST)
         target_compile_options(${target} PRIVATE -Wno-implicit-function-declaration)
     endforeach()
