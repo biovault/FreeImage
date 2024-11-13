@@ -17,50 +17,65 @@ jobs:
       fail-fast: true
       matrix:
         config:
-        # - {
-        #     name: "Windows MSVC 2019",
-        #     os: windows-2019,
-        #     cc: "cl",
-        #     cxx: "cl",
-        #     generator: "Visual Studio 16 2019"
-        #   }
-        # - {
-        #     name: "Windows MSVC 2022",
-        #     os: windows-2022,
-        #     cc: "cl",
-        #     cxx: "cl",
-        #     generator: "Visual Studio 17 2022"
-        #   }
-        # - {
-        #     name: "Ubuntu 20 GCC 9",
-        #     os: ubuntu-20.04,
-        #     cc: "gcc",
-        #     cxx: "g++",
-        #     generator: "Ninja"
-        #   }
-        # - {
-        #     name: "Ubuntu 22 GCC 11",
-        #     os: ubuntu-22.04,
-        #     cc: "gcc",
-        #     cxx: "g++",
-        #     generator: "Ninja"
-        #   }
         - {
-            name: "macOS 14 Xcode 15 (ARM)",
-            os: macos-14,
+            name: "Windows MSVC 2019",
+            os: windows-2019,
+            cc: "cl",
+            cxx: "cl",
+            generator: "Visual Studio 16 2019"
+          }
+        - {
+            name: "Windows MSVC 2022",
+            os: windows-2022,
+            cc: "cl",
+            cxx: "cl",
+            generator: "Visual Studio 17 2022"
+          }
+        - {
+            name: "Ubuntu 20 GCC 9",
+            os: ubuntu-20.04,
+            cc: "gcc",
+            cxx: "g++",
+            generator: "Ninja"
+          }
+          - {
+            name: "Ubuntu 22 GCC 11",
+            os: ubuntu-22.04,
+            cc: "gcc",
+            cxx: "g++",
+            generator: "Ninja"
+          }
+          - {
+            name: "Ubuntu 24 GCC 13",
+            os: ubuntu-24.04,
+            cc: "gcc",
+            cxx: "g++",
+            generator: "Ninja"
+          }
+        - {
+            name: "macOS 13 Xcode 14",
+            os: macos-13,
             cc: "clang",
             cxx: "clang++",
             generator: "Xcode",
-            xcode_version: "15.4"
+            xcode_version: "14.3.1"
           }
-        # - {
-        #     name: "macOS 13 Xcode 14",
-        #     os: macos-13,
-        #     cc: "clang",
-        #     cxx: "clang++",
-        #     generator: "Xcode",
-        #     xcode_version: "14.3.1"
-        #   }
+        - {
+          name: "macOS 14 Xcode 15 (ARM)",
+          os: macos-14,
+          cc: "clang",
+          cxx: "clang++",
+          generator: "Xcode",
+          xcode_version: "15.4"
+        }
+        - {
+          name: "macOS 15 Xcode 16 (ARM)",
+          os: macos-15,
+          cc: "clang",
+          cxx: "clang++",
+          generator: "Xcode",
+          xcode_version: "16.0"
+        }
         build_type: [Debug, Release]
 
     steps:
