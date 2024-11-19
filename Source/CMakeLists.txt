@@ -239,7 +239,7 @@ endif()
 
 # position independent code on linux
 if(UNIX AND NOT APPLE)
-    message(STATUS "[LINUX ] Setting: POSITION_INDEPENDENT_CODE ON")
+    message(STATUS "[LINUX] Setting: POSITION_INDEPENDENT_CODE ON")
     foreach(target IN LISTS TARGET_LIST)
         set_property(TARGET ${target} PROPERTY POSITION_INDEPENDENT_CODE ON)
     endforeach()
