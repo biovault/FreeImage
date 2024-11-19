@@ -224,12 +224,15 @@ endforeach()
 # target_compile_features c_std_11 let's a target use newer versions if available
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION LESS 1930)
     foreach(target IN LISTS TARGET_LIST)
-        set_target_properties(${target} PROPERTIES C_STANDARD "")
+        set_target_properties(${target} PROPERTIES C_STANDARD 99)
     endforeach()
 else()
     message(STATUS "Setting: C_STANDARD 11")
     foreach(target IN LISTS TARGET_LIST)
-        target_compile_features(${target} PRIVATE c_std_11)
+        target_compile_options(${target} PRIVATE
+            $<$<CXX_COMPILER_ID:GNU,Clang>:-std=c11>   # For GCC and Clang
+            $<$<CXX_COMPILER_ID:MSVC>:/std:c11>        # For MSVC
+        )
     endforeach()
 endif()
 
