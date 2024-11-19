@@ -9,11 +9,6 @@ set( FREEIMAGE_VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${F
 
 project( FreeImage VERSION ${FREEIMAGE_VERSION} LANGUAGES C CXX )
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    set(CMAKE_C_FLAGS "/DWIN32")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DWIN32 /EHsc /Zc:__cplusplus")
-endif()
-
 add_subdirectory( ZLibFreeImage ) # ZLibFreeImage is a dependency of other libraries, so make sure it's loaded first.
 add_subdirectory( LibJPEG )
 add_subdirectory( LibJXR )
@@ -232,6 +227,12 @@ if (NOT (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION LESS 1930))
     foreach(target IN LISTS TARGET_LIST)
         target_compile_features(${target} PRIVATE c_std_11)
     endforeach()
+endif()
+
+# msvc specific compile flags
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_definitions(${target} PRIVATE WIN32)
+    target_compile_options(${target} PRIVATE /EHsc /Zc:__cplusplus)
 endif()
 
 # position independent code on linux
