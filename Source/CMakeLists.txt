@@ -216,17 +216,21 @@ target_include_directories( FreeImageLib
 
 set(TARGET_LIST FreeImage FreeImageLib LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLibFreeImage)
 
-# Enforece c and cxx standards
+# Enforce c and cxx standards
 message(STATUS "Setting: CXX_STANDARD 14")
 foreach(target IN LISTS TARGET_LIST)
-    set_property(TARGET ${target} PROPERTY CXX_STANDARD 14)
+    target_compile_options(${target} PRIVATE
+        $<$<CXX_COMPILER_ID:GNU,Clang>:-std=c++14>   # For GCC and Clang
+        $<$<CXX_COMPILER_ID:MSVC>:/std:c++14>        # For MSVC
+    )
 endforeach()
 
 # MSVC 2019 does not seem to support c11 nicely. use it for all other compilers and msvc 2022
+# target_compile_features c_std_11 let's a target use newer versions if available
 if (NOT (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION LESS 1930))
     message(STATUS "Setting: C_STANDARD 11")
     foreach(target IN LISTS TARGET_LIST)
-        set_property(TARGET ${target} PROPERTY C_STANDARD 11)
+        target_compile_features(${target} PRIVATE c_std_11)
     endforeach()
 endif()
 
