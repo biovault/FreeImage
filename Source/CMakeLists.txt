@@ -232,8 +232,14 @@ endif()
 # msvc specific compile flags
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     foreach(target IN LISTS TARGET_LIST)
-        target_compile_definitions(${target} PRIVATE WIN32)
         target_compile_options(${target} PRIVATE /EHsc /Zc:__cplusplus)
+    endforeach()
+endif()
+
+# windows specific compile flags
+if(WIN32)
+    foreach(target IN LISTS TARGET_LIST)
+        target_compile_definitions(${target} PRIVATE WIN32)
     endforeach()
 endif()
 
@@ -256,6 +262,7 @@ if(UNIX)
     endforeach()
 endif()
 
+# apple specific compile definitions
 if(APPLE)
     message(STATUS "[APPLE] Setting: NO_LCMS")
     foreach(target IN LISTS TARGET_LIST)
