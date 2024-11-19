@@ -9,11 +9,6 @@ set( FREEIMAGE_VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${F
 
 project( FreeImage VERSION ${FREEIMAGE_VERSION} LANGUAGES C CXX )
 
-if(MSVC)
-    set(CMAKE_C_FLAGS "/DWIN32")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DWIN32 /EHsc /Zc:__cplusplus")
-endif()
-
 add_subdirectory( ZLibFreeImage ) # ZLibFreeImage is a dependency of other libraries, so make sure it's loaded first.
 add_subdirectory( LibJPEG )
 add_subdirectory( LibJXR )
@@ -234,9 +229,23 @@ if (NOT (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION LESS 1930))
     endforeach()
 endif()
 
+# msvc specific compile flags
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    foreach(target IN LISTS TARGET_LIST)
+        target_compile_options(${target} PRIVATE /EHsc /Zc:__cplusplus)
+    endforeach()
+endif()
+
+# windows specific compile flags
+if(WIN32)
+    foreach(target IN LISTS TARGET_LIST)
+        target_compile_definitions(${target} PRIVATE WIN32)
+    endforeach()
+endif()
+
 # position independent code on linux
 if(UNIX AND NOT APPLE)
-    message(STATUS "[LINUX ] Setting: POSITION_INDEPENDENT_CODE ON")
+    message(STATUS "[LINUX] Setting: POSITION_INDEPENDENT_CODE ON")
     foreach(target IN LISTS TARGET_LIST)
         set_property(TARGET ${target} PROPERTY POSITION_INDEPENDENT_CODE ON)
     endforeach()
@@ -253,6 +262,7 @@ if(UNIX)
     endforeach()
 endif()
 
+# apple specific compile definitions
 if(APPLE)
     message(STATUS "[APPLE] Setting: NO_LCMS")
     foreach(target IN LISTS TARGET_LIST)
