@@ -211,7 +211,7 @@ target_include_directories( FreeImageLib
 
 set(TARGET_LIST FreeImage FreeImageLib LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLibFreeImage)
 
-# Enforce c and cxx standards
+# Enforce cxx standard
 message(STATUS "Setting: CXX_STANDARD 14")
 foreach(target IN LISTS TARGET_LIST)
     target_compile_options(${target} PRIVATE
@@ -220,23 +220,27 @@ foreach(target IN LISTS TARGET_LIST)
     )
 endforeach()
 
-# MSVC 2019 does not seem to support c11 nicely. use it for all other compilers and msvc 2022
+# MSVC 2019 does not seem to support c11 nicely. use it for all other compilers though
 # target_compile_features c_std_11 let's a target use newer versions if available
-if (NOT (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION LESS 1930))
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION LESS 1930)
+    foreach(target IN LISTS TARGET_LIST)
+        set_target_properties(${target} PROPERTIES C_STANDARD "")
+    endforeach()
+else()
     message(STATUS "Setting: C_STANDARD 11")
     foreach(target IN LISTS TARGET_LIST)
         target_compile_features(${target} PRIVATE c_std_11)
     endforeach()
 endif()
 
-# msvc specific compile flags
+# msvc specific compile options
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     foreach(target IN LISTS TARGET_LIST)
         target_compile_options(${target} PRIVATE /EHsc /Zc:__cplusplus)
     endforeach()
 endif()
 
-# windows specific compile flags
+# windows specific compile definitions
 if(WIN32)
     foreach(target IN LISTS TARGET_LIST)
         target_compile_definitions(${target} PRIVATE WIN32)
@@ -249,7 +253,6 @@ if(UNIX AND NOT APPLE)
     foreach(target IN LISTS TARGET_LIST)
         set_property(TARGET ${target} PROPERTY POSITION_INDEPENDENT_CODE ON)
     endforeach()
-    
 endif()
 
 # control exception handling and symbol visibility 
