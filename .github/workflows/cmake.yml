@@ -32,11 +32,11 @@ jobs:
             generator: "Visual Studio 17 2022"
           }
         - {
-            name: "Ubuntu 20 GCC 9",
-            os: ubuntu-20.04,
-            cc: "gcc",
-            cxx: "g++",
-            generator: "Ninja"
+            name: "Windows MSVC 2025",
+            os: windows-2025,
+            cc: "cl",
+            cxx: "cl",
+            generator: "Visual Studio 17 2022"
           }
         - {
             name: "Ubuntu 22 GCC 11",
@@ -74,7 +74,7 @@ jobs:
             cc: "clang",
             cxx: "clang++",
             generator: "Xcode",
-            xcode_version: "16.0"
+            xcode_version: "16.2"
           }
         build_type: [Debug, Release]
 
