@@ -1,15 +1,15 @@
 
 //*@@@+++@@@@******************************************************************
 //
-// Copyright ï¿½ Microsoft Corp.
+// Copyright © Microsoft Corp.
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 // 
-// ï¿½ Redistributions of source code must retain the above copyright notice,
+// • Redistributions of source code must retain the above copyright notice,
 //   this list of conditions and the following disclaimer.
-// ï¿½ Redistributions in binary form must reproduce the above copyright notice,
+// • Redistributions in binary form must reproduce the above copyright notice,
 //   this list of conditions and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
 // 
@@ -26,9 +26,11 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 //*@@@---@@@@******************************************************************
+
 #ifdef __APPLE__
     #include <wchar.h>
 #endif
+
 #include <limits.h>
 #include <JXRGlue.h>
 
@@ -1823,6 +1825,15 @@ ERR ReadContainer(
     offPos = (size_t)offPFD;
     Call(GetUShort(pWS, offPos, &cPFDEntry)); offPos += 2;
     FailIf(0 == cPFDEntry || USHRT_MAX == cPFDEntry, WMP_errUnsupportedFormat);
+	// each entry is 12 bytes long : check that the file size is large enough to contains all entries
+	{
+		size_t currentPos = 0;
+		Call(pWS->GetPos(pWS, &currentPos));
+		Call(pWS->SetPos(pWS, cPFDEntry * 12));	// we do not take into account the signature, so that we should not have an EOF here
+		FailIf(pWS->EOS(pWS) == 0, WMP_errFileIO);
+		Call(pWS->SetPos(pWS, currentPos));
+	}
+
     Call(ParsePFD(pID, offPos, cPFDEntry));
 
     //================================
@@ -2182,6 +2193,40 @@ ERR PKImageDecode_GetColorContext_WMP(PKImageDecode *pID, U8 *pbColorContext, U3
         pID->WMP.wmiDEMisc.uColorProfileByteCount, pbColorContext, pcbColorContext);
 }
 
+
+ERR PKImageDecode_GetXMPMetadata_WMP(PKImageDecode *pID, U8 *pbXMPMetadata, U32 *pcbXMPMetadata)
+{
+    return PKImageDecode_GetMetadata_WMP(pID, pID->WMP.wmiDEMisc.uXMPMetadataOffset,
+        pID->WMP.wmiDEMisc.uXMPMetadataByteCount, pbXMPMetadata, pcbXMPMetadata);
+}
+
+
+ERR PKImageDecode_GetEXIFMetadata_WMP(PKImageDecode *pID, U8 *pbEXIFMetadata, U32 *pcbEXIFMetadata)
+{
+    return PKImageDecode_GetMetadata_WMP(pID, pID->WMP.wmiDEMisc.uEXIFMetadataOffset,
+        pID->WMP.wmiDEMisc.uEXIFMetadataByteCount, pbEXIFMetadata, pcbEXIFMetadata);
+}
+
+
+ERR PKImageDecode_GetGPSInfoMetadata_WMP(PKImageDecode *pID, U8 *pbGPSInfoMetadata, U32 *pcbGPSInfoMetadata)
+{
+    return PKImageDecode_GetMetadata_WMP(pID, pID->WMP.wmiDEMisc.uGPSInfoMetadataOffset,
+        pID->WMP.wmiDEMisc.uGPSInfoMetadataByteCount, pbGPSInfoMetadata, pcbGPSInfoMetadata);
+}
+
+
+ERR PKImageDecode_GetIPTCNAAMetadata_WMP(PKImageDecode *pID, U8 *pbIPTCNAAMetadata, U32 *pcbIPTCNAAMetadata)
+{
+    return PKImageDecode_GetMetadata_WMP(pID, pID->WMP.wmiDEMisc.uIPTCNAAMetadataOffset,
+        pID->WMP.wmiDEMisc.uIPTCNAAMetadataByteCount, pbIPTCNAAMetadata, pcbIPTCNAAMetadata);
+}
+
+
+ERR PKImageDecode_GetPhotoshopMetadata_WMP(PKImageDecode *pID, U8 *pbPhotoshopMetadata, U32 *pcbPhotoshopMetadata)
+{
+    return PKImageDecode_GetMetadata_WMP(pID, pID->WMP.wmiDEMisc.uPhotoshopMetadataOffset,
+        pID->WMP.wmiDEMisc.uPhotoshopMetadataByteCount, pbPhotoshopMetadata, pcbPhotoshopMetadata);
+}
 
 
 ERR PKImageDecode_GetDescriptiveMetadata_WMP(PKImageDecode *pID, DESCRIPTIVEMETADATA *pDescMetadata)

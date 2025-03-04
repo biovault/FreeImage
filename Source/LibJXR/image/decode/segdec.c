@@ -1,14 +1,14 @@
 //*@@@+++@@@@******************************************************************
 //
-// Copyright ï¿½ Microsoft Corp.
+// Copyright © Microsoft Corp.
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 // 
-// ï¿½ Redistributions of source code must retain the above copyright notice,
+// • Redistributions of source code must retain the above copyright notice,
 //   this list of conditions and the following disclaimer.
-// ï¿½ Redistributions in binary form must reproduce the above copyright notice,
+// • Redistributions in binary form must reproduce the above copyright notice,
 //   this list of conditions and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
 // 
@@ -30,6 +30,7 @@
     #include <libkern/OSByteOrder.h>
     #define _byteswap_ulong(x) _OSSwapInt32
 #endif
+
 #include "strcodec.h"
 #include "decode.h"
 
@@ -45,18 +46,10 @@ extern const int blkOffset[16];
 extern const int blkOffsetUV[4];
 static Int DecodeSignificantAbsLevel (struct CAdaptiveHuffman *pAHexpt, BitIOInfo* pIO);
 
-//#undef X86OPT_INLINE
-
-#ifdef X86OPT_INLINE
-#define _FORCEINLINE __forceinline
-#else // X86OPT_INLINE
-#define _FORCEINLINE
-#endif // X86OPT_INLINE
-
 //================================================================
 // Memory access functions
 //================================================================
-static U32 _FORCEINLINE _load4(void* pv)
+static U32 _load4(void* pv)
 {
 #ifdef _BIG__ENDIAN_
     return (*(U32*)pv);
@@ -72,19 +65,19 @@ static U32 _FORCEINLINE _load4(void* pv)
 #endif // _BIG__ENDIAN_
 }
 
-static _FORCEINLINE U32 _peekBit16(BitIOInfo* pIO, U32 cBits)
+static U32 _peekBit16(BitIOInfo* pIO, U32 cBits)
 {
     PEEKBIT16(pIO, cBits);
     // masking is not needed here because shift of unsigned int is implemented as a logical shift (SHR)!
 }
 
 #define LOAD16 _load4
-static _FORCEINLINE U32 _flushBit16(BitIOInfo* pIO, U32 cBits)
+static U32 _flushBit16(BitIOInfo* pIO, U32 cBits)
 {
     FLUSHBIT16(pIO, cBits);
 }
 
-static _FORCEINLINE U32 _getBit16(BitIOInfo* pIO, U32 cBits)
+static U32 _getBit16(BitIOInfo* pIO, U32 cBits)
 {
     U32 uiRet = _peekBit16(pIO, cBits);
     _flushBit16(pIO, cBits);
@@ -112,7 +105,7 @@ Int getHuff(const short *pDecodeTable, BitIOInfo* pIO)
 }
 
 #if 1
-static _FORCEINLINE U32 _getBool16(BitIOInfo* pIO)
+static U32 _getBool16(BitIOInfo* pIO)
 {
     U32 uiRet = pIO->uiAccumulator >> 31;//_peekBit16(pIO, 1);
     //_flushBit16(pIO, 1);
@@ -129,7 +122,7 @@ static _FORCEINLINE U32 _getBool16(BitIOInfo* pIO)
     return uiRet;
 }
 
-static _FORCEINLINE I32 _getSign(BitIOInfo* pIO)
+static I32 _getSign(BitIOInfo* pIO)
 {
     I32 uiRet = (int) pIO->uiAccumulator >> 31;//_peekBit16(pIO, 1);
     //_flushBit16(pIO, 1);
@@ -151,7 +144,7 @@ static _FORCEINLINE I32 _getSign(BitIOInfo* pIO)
 #endif
 
 /** this function returns cBits if zero is read, or a signed value if first cBits are not all zero **/
-static _FORCEINLINE I32 _getBit16s(BitIOInfo* pIO, U32 cBits)
+static I32 _getBit16s(BitIOInfo* pIO, U32 cBits)
 {
     I32 iRet = (I32)_peekBit16(pIO, cBits + 1);
     iRet = ((iRet >> 1) ^ (-(iRet & 1))) + (iRet & 1);
@@ -162,7 +155,7 @@ static _FORCEINLINE I32 _getBit16s(BitIOInfo* pIO, U32 cBits)
 /*************************************************************************
     Huffman decoding with short tables
 *************************************************************************/
-static _FORCEINLINE Int _getHuffShort(const short *pDecodeTable, BitIOInfo* pIO)
+static Int _getHuffShort(const short *pDecodeTable, BitIOInfo* pIO)
 {
     Int iSymbol = pDecodeTable[_peekBit16(pIO, HUFFMAN_DECODE_ROOT_BITS)];
     assert(iSymbol >= 0);
@@ -182,7 +175,7 @@ static Int AdaptDecFixed (CAdaptiveHuffman *pAH)
 /*************************************************************************
     DecodeCBP
 *************************************************************************/
-static Void DecodeCBP(CWMImageStrCodec * pSC, CCodingContext *pContext)
+static void DecodeCBP(CWMImageStrCodec * pSC, CCodingContext *pContext)
 {
     BitIOInfo* pIO = pContext->m_pIOAC;
     const COLORFORMAT cf = pSC->m_param.cfColorFormat;
@@ -357,7 +350,7 @@ static Void DecodeCBP(CWMImageStrCodec * pSC, CCodingContext *pContext)
         pAHexpt[7-8] == <lev | continuous> condition on SRn no use
 *************************************************************************/
 
-Int _FORCEINLINE DecodeSignificantRun (Int iMaxRun, struct CAdaptiveHuffman *pAHexpt, BitIOInfo* pIO)
+Int DecodeSignificantRun (Int iMaxRun, struct CAdaptiveHuffman *pAHexpt, BitIOInfo* pIO)
 {
     Int iIndex;
     static const Int aRemap[] = {1,2,3,5,7,   1,2,3,5,7,   /*1,2,3,4,6,  */1,2,3,4,5 };
@@ -390,10 +383,10 @@ Int _FORCEINLINE DecodeSignificantRun (Int iMaxRun, struct CAdaptiveHuffman *pAH
 }
 
 #ifndef X86OPT_INLINE
-static Void DecodeFirstIndex (Int *pIndex, struct CAdaptiveHuffman *pAHexpt, 
+static void DecodeFirstIndex (Int *pIndex, struct CAdaptiveHuffman *pAHexpt, 
                       BitIOInfo* pIO)
 #else
-static __forceinline Void DecodeFirstIndex (Int *pIndex, struct CAdaptiveHuffman *pAHexpt, 
+static __forceinline void DecodeFirstIndex (Int *pIndex, struct CAdaptiveHuffman *pAHexpt, 
                       BitIOInfo* pIO)
 #endif
 {
@@ -405,10 +398,10 @@ static __forceinline Void DecodeFirstIndex (Int *pIndex, struct CAdaptiveHuffman
 }
 
 #ifndef X86OPT_INLINE
-static Void DecodeIndex (Int *pIndex, Int iLoc, struct CAdaptiveHuffman *pAHexpt, 
+static void DecodeIndex (Int *pIndex, Int iLoc, struct CAdaptiveHuffman *pAHexpt, 
                  BitIOInfo* pIO)
 #else
-static __forceinline Void DecodeIndex (Int *pIndex, Int iLoc,
+static __forceinline void DecodeIndex (Int *pIndex, Int iLoc,
                                        struct CAdaptiveHuffman *pAHexpt, BitIOInfo* pIO)
 #endif
 {
@@ -437,8 +430,7 @@ static __forceinline Void DecodeIndex (Int *pIndex, Int iLoc,
     }
 }
 
-static _FORCEINLINE Int DecodeBlock (Bool bChroma, Int *aLocalCoef, struct CAdaptiveHuffman **pAHexpt,
-                        const Int iContextOffset, BitIOInfo* pIO, Int iLocation)
+static Int DecodeBlock (Bool bChroma, Int *aLocalCoef, struct CAdaptiveHuffman **pAHexpt, const Int iContextOffset, BitIOInfo* pIO, Int iLocation)
 {
     Int iSR, iSRn, iIndex, iNumNonzero = 1, iCont, iSign;
     struct CAdaptiveHuffman **pAH1 = pAHexpt + iContextOffset + bChroma * 3;
@@ -492,8 +484,7 @@ static _FORCEINLINE Int DecodeBlock (Bool bChroma, Int *aLocalCoef, struct CAdap
 /*************************************************************************
     DecodeBlockHighpass : 
 *************************************************************************/
-static _FORCEINLINE Int DecodeBlockHighpass (const Bool bChroma, struct CAdaptiveHuffman **pAHexpt,
-                       BitIOInfo* pIO, const Int iQP, Int *pCoef, CAdaptiveScan *pScan)
+static Int DecodeBlockHighpass (const Bool bChroma, struct CAdaptiveHuffman **pAHexpt, BitIOInfo* pIO, const Int iQP, Int *pCoef, CAdaptiveScan *pScan)
 {
     const Int iContextOffset = CTDC + CONTEXTX;
     UInt  iLoc = 1;
@@ -570,7 +561,7 @@ static _FORCEINLINE Int DecodeBlockHighpass (const Bool bChroma, struct CAdaptiv
 /*************************************************************************
     DecodeBlockAdaptive
 *************************************************************************/
-static _FORCEINLINE Int DecodeBlockAdaptive (Bool bNoSkip, Bool bChroma, CAdaptiveHuffman **pAdHuff,
+static Int DecodeBlockAdaptive (Bool bNoSkip, Bool bChroma, CAdaptiveHuffman **pAdHuff,
                                 BitIOInfo *pIO, BitIOInfo *pIOFL,
                                 PixelI *pCoeffs, CAdaptiveScan *pScan,
                                 const Int iModelBits, const Int iTrim, const Int iQP,
@@ -580,8 +571,9 @@ static _FORCEINLINE Int DecodeBlockAdaptive (Bool bNoSkip, Bool bChroma, CAdapti
     // const Int iContextOffset = CTDC + CONTEXTX;
     Int kk, iNumNonzero = 0, iFlex = iModelBits - iTrim;
 
-    if (iFlex < 0 || bSkipFlexbits)
-        iFlex = 0;
+	if (iFlex < 0 || bSkipFlexbits) {
+		iFlex = 0;
+	}
 
     if (bNoSkip) {
         const Int iQP1 = (iQP << iModelBits);
@@ -634,7 +626,7 @@ static _FORCEINLINE Int DecodeBlockAdaptive (Bool bNoSkip, Bool bChroma, CAdapti
 /*************************************************************************
     GetCoeffs
 *************************************************************************/
-static _FORCEINLINE Int DecodeCoeffs (CWMImageStrCodec * pSC, CCodingContext *pContext,
+static Int DecodeCoeffs (CWMImageStrCodec * pSC, CCodingContext *pContext,
                          Int iMBX, Int iMBY,
                          BitIOInfo* pIO, BitIOInfo *pIOFL)
 {

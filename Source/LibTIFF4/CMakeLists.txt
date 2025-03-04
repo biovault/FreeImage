@@ -1,8 +1,8 @@
-cmake_minimum_required( VERSION 3.23.0 ) # Current version of CMake when this file was created.
+cmake_minimum_required( VERSION 3.23 ) 
 
 set( TIFFLIB_VERSION_MAJOR 4 )
-set( TIFFLIB_VERSION_MINOR 0 )
-set( TIFFLIB_VERSION_PATCH 9 )
+set( TIFFLIB_VERSION_MINOR 6 )
+set( TIFFLIB_VERSION_PATCH 0 )
 set( TIFFLIB_VERSION ${TIFFLIB_VERSION_MAJOR}.${TIFFLIB_VERSION_MINOR}.${TIFFLIB_VERSION_PATCH} )
 
 project( LibTIFF4 VERSION ${TIFFLIB_VERSION} LANGUAGES C )
@@ -12,6 +12,7 @@ set( HEADER_FILES
 	tif_config.h
 	tif_dir.h
 	tif_fax3.h
+	tif_hash_set.h
 	tif_predict.h
 	tiff.h
 	tiffconf.h
@@ -40,7 +41,9 @@ set( SOURCE_FILES
 	tif_fax3sm.c
 	tif_flush.c
 	tif_getimage.c
+	tif_hash_set.c
 	tif_jpeg.c
+	tif_lerc.c
 	tif_luv.c
 	tif_lzma.c
 	tif_lzw.c
@@ -58,6 +61,7 @@ set( SOURCE_FILES
 	tif_tile.c
 	tif_version.c
 	tif_warning.c
+	tif_webp.c
 	tif_write.c
 	tif_zip.c
 )

@@ -1,8 +1,8 @@
-cmake_minimum_required( VERSION 3.23.0 ) # Current version of CMake when this file was created.
+cmake_minimum_required( VERSION 3.23 )
 
 # Version information
 set( FREEIMAGE_VERSION_MAJOR 3 )
-set( FREEIMAGE_VERSION_MINOR 18 )
+set( FREEIMAGE_VERSION_MINOR 19 )
 set( FREEIMAGE_VERSION_PATCH 0 )
 set( FREEIMAGE_VERSION_TWEAK 0 )
 set( FREEIMAGE_VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${FREEIMAGE_VERSION_PATCH}.${FREEIMAGE_VERSION_TWEAK} )
