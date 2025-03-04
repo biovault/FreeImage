@@ -17,6 +17,14 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h
                @ONLY)
 
+set( LIBTIFF_MAJOR_VERSION ${TIFFLIB_VERSION_MAJOR} )
+set( LIBTIFF_MINOR_VERSION ${TIFFLIB_VERSION_MINOR} )
+set( LIBTIFF_MICRO_VERSION ${TIFFLIB_VERSION_PATCH} )
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffvers.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/tiffvers.h
+               @ONLY)
+
 
 set( HEADER_FILES
 	t4.h
@@ -31,7 +39,7 @@ set( HEADER_FILES
 	tiffconf.wince.h
 	tiffio.h
 	tiffiop.h
-	tiffvers.h
+	${CMAKE_CURRENT_BINARY_DIR}/tiffvers.h
 	uvcode.h
 )
 
