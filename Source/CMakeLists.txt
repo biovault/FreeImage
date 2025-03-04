@@ -211,6 +211,9 @@ target_include_directories( FreeImageLib
 
 set(TARGET_LIST FreeImage FreeImageLib LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLibFreeImage)
 
+set_target_properties(FreeImage PROPERTIES VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${FREEIMAGE_VERSION_PATCH})
+set_target_properties(FreeImageLib PROPERTIES VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${FREEIMAGE_VERSION_PATCH})
+
 # Enforce cxx standard
 message(STATUS "Setting: CXX_STANDARD 14")
 foreach(target IN LISTS TARGET_LIST)
