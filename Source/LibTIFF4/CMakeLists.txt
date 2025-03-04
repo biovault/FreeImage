@@ -7,15 +7,26 @@ set( TIFFLIB_VERSION ${TIFFLIB_VERSION_MAJOR}.${TIFFLIB_VERSION_MINOR}.${TIFFLIB
 
 project( LibTIFF4 VERSION ${TIFFLIB_VERSION} LANGUAGES C )
 
+include(CMakePackageConfigHelpers)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tif_config.h.cmake.in
+               ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h
+               @ONLY)
+               
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.cmake.in
+               ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h
+               @ONLY)
+
+
 set( HEADER_FILES
 	t4.h
-	tif_config.h
+	${CMAKE_CURRENT_BINARY_DIR}/tif_config.h
 	tif_dir.h
 	tif_fax3.h
 	tif_hash_set.h
 	tif_predict.h
 	tiff.h
-	tiffconf.h
+	${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h
 	tiffconf.vc.h
 	tiffconf.wince.h
 	tiffio.h
