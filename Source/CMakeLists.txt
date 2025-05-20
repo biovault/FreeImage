@@ -211,30 +211,20 @@ target_include_directories( FreeImageLib
 
 set(TARGET_LIST FreeImage FreeImageLib LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLibFreeImage)
 
-# Enforce cxx standard
-message(STATUS "Setting: CXX_STANDARD 14")
-foreach(target IN LISTS TARGET_LIST)
-    target_compile_options(${target} PRIVATE
-        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-std=c++14>   # For GCC and Clang
-        $<$<CXX_COMPILER_ID:MSVC>:/std:c++14>        # For MSVC
-    )
-endforeach()
+# Enforce and cxx standards
+set(FreeImage_CXX_STANDARD 17)
+set(FreeImage_C_STANDARD 17)
 
 # MSVC 2019 does not seem to support c11 nicely. use it for all other compilers though
 # target_compile_features c_std_11 let's a target use newer versions if available
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION LESS 1930)
-    foreach(target IN LISTS TARGET_LIST)
-        set_target_properties(${target} PROPERTIES C_STANDARD 99)
-    endforeach()
-else()
-    message(STATUS "Setting: C_STANDARD 11")
-    foreach(target IN LISTS TARGET_LIST)
-        target_compile_options(${target} PRIVATE
-            $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-std=c11>   # For GCC and Clang
-            $<$<CXX_COMPILER_ID:MSVC>:/std:c11>        # For MSVC
-        )
-    endforeach()
+    set(FreeImage_C_STANDARD 99)
 endif()
+
+foreach(target IN LISTS TARGET_LIST)
+    set_target_properties(${target} PROPERTIES CXX_STANDARD ${FreeImage_CXX_STANDARD})
+    set_target_properties(${target} PROPERTIES C_STANDARD ${FreeImage_C_STANDARD})
+endforeach()
 
 # msvc specific compile options
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
