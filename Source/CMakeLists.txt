@@ -215,7 +215,7 @@ set(TARGET_LIST FreeImage FreeImageLib LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw 
 message(STATUS "Setting: CXX_STANDARD 14")
 foreach(target IN LISTS TARGET_LIST)
     target_compile_options(${target} PRIVATE
-        $<$<CXX_COMPILER_ID:GNU,Clang>:-std=c++14>   # For GCC and Clang
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-std=c++14>   # For GCC and Clang
         $<$<CXX_COMPILER_ID:MSVC>:/std:c++14>        # For MSVC
     )
 endforeach()
@@ -230,7 +230,7 @@ else()
     message(STATUS "Setting: C_STANDARD 11")
     foreach(target IN LISTS TARGET_LIST)
         target_compile_options(${target} PRIVATE
-            $<$<CXX_COMPILER_ID:GNU,Clang>:-std=c11>   # For GCC and Clang
+            $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-std=c11>   # For GCC and Clang
             $<$<CXX_COMPILER_ID:MSVC>:/std:c11>        # For MSVC
         )
     endforeach()
