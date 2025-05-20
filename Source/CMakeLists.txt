@@ -213,7 +213,7 @@ set(TARGET_LIST FreeImage FreeImageLib LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw 
 
 # Enforce and cxx standards
 set(FreeImage_CXX_STANDARD 14)
-set(FreeImage_C_STANDARD 17)
+set(FreeImage_C_STANDARD 11)
 
 # MSVC 2019 does not seem to support c11 nicely. use it for all other compilers though
 # target_compile_features c_std_11 let's a target use newer versions if available
