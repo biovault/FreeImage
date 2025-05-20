@@ -215,7 +215,7 @@ set_target_properties(FreeImage PROPERTIES VERSION ${FREEIMAGE_VERSION_MAJOR}.${
 set_target_properties(FreeImageLib PROPERTIES VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${FREEIMAGE_VERSION_PATCH})
 
 # Enforce and cxx standards
-set(FreeImage_CXX_STANDARD 17)
+set(FreeImage_CXX_STANDARD 14)
 set(FreeImage_C_STANDARD 17)
 
 # MSVC 2019 does not seem to support c11 nicely. use it for all other compilers though
