@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.23.0 ) # Current version of CMake when this file was created.
+cmake_minimum_required( VERSION 3.23 ) 
 
 project( LibWebP LANGUAGES C )
 
@@ -17,6 +17,7 @@ set( HEADER_FILES
 	src/dsp/mips_macro.h
 	src/dsp/msa_macro.h
 	src/dsp/neon.h
+	src/dsp/quant.h
 	src/dsp/yuv.h
 	src/enc/backward_references_enc.h
 	src/enc/cost_enc.h
@@ -71,6 +72,7 @@ set( SOURCE_FILES
 	src/dsp/cost.c
 	src/dsp/cost_mips32.c
 	src/dsp/cost_mips_dsp_r2.c
+	src/dsp/cost_neon.c
 	src/dsp/cost_sse2.c
 	src/dsp/cpu.c
 	src/dsp/dec.c
@@ -106,6 +108,7 @@ set( SOURCE_FILES
 	src/dsp/lossless_msa.c
 	src/dsp/lossless_neon.c
 	src/dsp/lossless_sse2.c
+	src/dsp/lossless_sse41.c
 	src/dsp/rescaler.c
 	src/dsp/rescaler_mips32.c
 	src/dsp/rescaler_mips_dsp_r2.c

@@ -1,10 +1,10 @@
-cmake_minimum_required( VERSION 3.23.0 ) # Current version of CMake when this file was created.
+cmake_minimum_required( VERSION 3.23 )
 
 # Version information
 set( FREEIMAGE_VERSION_MAJOR 3 )
-set( FREEIMAGE_VERSION_MINOR 18 )
+set( FREEIMAGE_VERSION_MINOR 19 )
 set( FREEIMAGE_VERSION_PATCH 0 )
-set( FREEIMAGE_VERSION_TWEAK 0 )
+set( FREEIMAGE_VERSION_TWEAK 1 ) # we use a newer libpng (1.6.48) and zlib (1.3.1)
 set( FREEIMAGE_VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${FREEIMAGE_VERSION_PATCH}.${FREEIMAGE_VERSION_TWEAK} )
 
 project( FreeImage VERSION ${FREEIMAGE_VERSION} LANGUAGES C CXX )
@@ -211,30 +211,23 @@ target_include_directories( FreeImageLib
 
 set(TARGET_LIST FreeImage FreeImageLib LibJPEG LibJXR LibOpenJPEG LibPNG LibRaw LibTIFF4 LibWebP OpenEXR ZLibFreeImage)
 
-# Enforce cxx standard
-message(STATUS "Setting: CXX_STANDARD 14")
-foreach(target IN LISTS TARGET_LIST)
-    target_compile_options(${target} PRIVATE
-        $<$<CXX_COMPILER_ID:GNU,Clang>:-std=c++14>   # For GCC and Clang
-        $<$<CXX_COMPILER_ID:MSVC>:/std:c++14>        # For MSVC
-    )
-endforeach()
+set_target_properties(FreeImage PROPERTIES VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${FREEIMAGE_VERSION_PATCH})
+set_target_properties(FreeImageLib PROPERTIES VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${FREEIMAGE_VERSION_PATCH})
+
+# Enforce and cxx standards
+set(FreeImage_CXX_STANDARD 14)
+set(FreeImage_C_STANDARD 17)
 
 # MSVC 2019 does not seem to support c11 nicely. use it for all other compilers though
 # target_compile_features c_std_11 let's a target use newer versions if available
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND MSVC_VERSION LESS 1930)
-    foreach(target IN LISTS TARGET_LIST)
-        set_target_properties(${target} PROPERTIES C_STANDARD 99)
-    endforeach()
-else()
-    message(STATUS "Setting: C_STANDARD 11")
-    foreach(target IN LISTS TARGET_LIST)
-        target_compile_options(${target} PRIVATE
-            $<$<CXX_COMPILER_ID:GNU,Clang>:-std=c11>   # For GCC and Clang
-            $<$<CXX_COMPILER_ID:MSVC>:/std:c11>        # For MSVC
-        )
-    endforeach()
+    set(FreeImage_C_STANDARD 99)
 endif()
+
+foreach(target IN LISTS TARGET_LIST)
+    set_target_properties(${target} PROPERTIES CXX_STANDARD ${FreeImage_CXX_STANDARD})
+    set_target_properties(${target} PROPERTIES C_STANDARD ${FreeImage_C_STANDARD})
+endforeach()
 
 # msvc specific compile options
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
