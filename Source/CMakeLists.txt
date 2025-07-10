@@ -234,6 +234,13 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     foreach(target IN LISTS TARGET_LIST)
         target_compile_options(${target} PRIVATE /EHsc /Zc:__cplusplus)
     endforeach()
+
+    # see https://github.com/microsoft/vcpkg/blob/b9f5f9c4fd0088a7e56ae357a4ba39bc3f8be2de/ports/jxrlib/CMakeLists.txt
+    target_compile_options(LibJXR PRIVATE 
+        -Wno-error=implicit-function-declaration        
+	-Wno-endif-labels
+	-Wno-incompatible-pointer-types             # https://gcc.gnu.org/gcc-14/porting_to.html#incompatible-pointer-types
+    )
 endif()
 
 # windows specific compile definitions
