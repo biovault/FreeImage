@@ -4,7 +4,7 @@ cmake_minimum_required( VERSION 3.23 )
 set( FREEIMAGE_VERSION_MAJOR 3 )
 set( FREEIMAGE_VERSION_MINOR 19 )
 set( FREEIMAGE_VERSION_PATCH 0 )
-set( FREEIMAGE_VERSION_TWEAK 1 ) # we use a newer libpng (1.6.48) and zlib (1.3.1)
+set( FREEIMAGE_VERSION_TWEAK 2 ) # we include a newer libpng (1.6.48), newer zlib (1.3.1) and some build fixes
 set( FREEIMAGE_VERSION ${FREEIMAGE_VERSION_MAJOR}.${FREEIMAGE_VERSION_MINOR}.${FREEIMAGE_VERSION_PATCH}.${FREEIMAGE_VERSION_TWEAK} )
 
 project( FreeImage VERSION ${FREEIMAGE_VERSION} LANGUAGES C CXX )
@@ -234,6 +234,13 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     foreach(target IN LISTS TARGET_LIST)
         target_compile_options(${target} PRIVATE /EHsc /Zc:__cplusplus)
     endforeach()
+else()
+    # see https://github.com/microsoft/vcpkg/blob/b9f5f9c4fd0088a7e56ae357a4ba39bc3f8be2de/ports/jxrlib/CMakeLists.txt
+    target_compile_options(LibJXR PRIVATE 
+        -Wno-error=implicit-function-declaration        
+	-Wno-endif-labels
+	-Wno-incompatible-pointer-types             # https://gcc.gnu.org/gcc-14/porting_to.html#incompatible-pointer-types
+    )
 endif()
 
 # windows specific compile definitions
