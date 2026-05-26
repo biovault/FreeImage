@@ -25,11 +25,11 @@ jobs:
             generator: "Visual Studio 17 2022"
           }
         - {
-            name: "Windows MSVC 2025",
-            os: windows-2025,
+            name: "Windows MSVC 2026",
+            os: windows-2025-vs2026,
             cc: "cl",
             cxx: "cl",
-            generator: "Visual Studio 17 2022"
+            generator: "Visual Studio 18 2026"
           }
         - {
             name: "Ubuntu 22 GCC 11",
