@@ -46,14 +46,6 @@ jobs:
             generator: "Ninja"
           }
         - {
-            name: "macOS 13 Xcode 14",
-            os: macos-13,
-            cc: "clang",
-            cxx: "clang++",
-            generator: "Xcode",
-            xcode_version: "14.3.1"
-          }
-        - {
             name: "macOS 14 Xcode 15 (ARM)",
             os: macos-14,
             cc: "clang",
