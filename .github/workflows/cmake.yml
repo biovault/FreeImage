@@ -25,11 +25,11 @@ jobs:
             generator: "Visual Studio 17 2022"
           }
         - {
-            name: "Windows MSVC 2025",
-            os: windows-2025,
+            name: "Windows MSVC 2026",
+            os: windows-2025-vs2026,
             cc: "cl",
             cxx: "cl",
-            generator: "Visual Studio 17 2022"
+            generator: "Visual Studio 18 2026"
           }
         - {
             name: "Ubuntu 22 GCC 11",
@@ -44,14 +44,6 @@ jobs:
             cc: "gcc",
             cxx: "g++",
             generator: "Ninja"
-          }
-        - {
-            name: "macOS 13 Xcode 14",
-            os: macos-13,
-            cc: "clang",
-            cxx: "clang++",
-            generator: "Xcode",
-            xcode_version: "14.3.1"
           }
         - {
             name: "macOS 14 Xcode 15 (ARM)",
@@ -77,10 +69,18 @@ jobs:
             generator: "Xcode",
             xcode_version: "16.4"
           }
+        - {
+            name: "macOS 26 Xcode 26.5 (ARM)",
+            os: macos-26,
+            cc: "clang",
+            cxx: "clang++",
+            generator: "Xcode",
+            xcode_version: "26.5"
+          }
         build_type: [Debug, Release]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Install Ninja (Linux)
       if: runner.os == 'Linux'
