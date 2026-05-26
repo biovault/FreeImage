@@ -69,6 +69,14 @@ jobs:
             generator: "Xcode",
             xcode_version: "16.4"
           }
+        - {
+            name: "macOS 26 Xcode 26.5 (ARM)",
+            os: macos-26,
+            cc: "clang",
+            cxx: "clang++",
+            generator: "Xcode",
+            xcode_version: "26.5"
+          }
         build_type: [Debug, Release]
 
     steps:
