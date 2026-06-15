@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  BUILD_TYPE: Release
-
 jobs:
   build:
     name: ${{ matrix.config.name }} (${{ matrix.build_type }})
@@ -26,7 +23,7 @@ jobs:
           }
         - {
             name: "Windows MSVC 2026",
-            os: windows-2025-vs2026,
+            os: windows-2025,
             cc: "cl",
             cxx: "cl",
             generator: "Visual Studio 18 2026"
@@ -44,14 +41,6 @@ jobs:
             cc: "gcc",
             cxx: "g++",
             generator: "Ninja"
-          }
-        - {
-            name: "macOS 14 Xcode 15 (ARM)",
-            os: macos-14,
-            cc: "clang",
-            cxx: "clang++",
-            generator: "Xcode",
-            xcode_version: "15.4"
           }
         - {
             name: "macOS 15 Xcode 16.2 (ARM)",
