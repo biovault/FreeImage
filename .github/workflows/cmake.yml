@@ -43,6 +43,13 @@ jobs:
             generator: "Ninja"
           }
         - {
+            name: "Ubuntu 26 GCC 15",
+            os: ubuntu-26.04,
+            cc: "gcc",
+            cxx: "g++",
+            generator: "Ninja"
+          }
+        - {
             name: "macOS 15 Xcode 16.2 (ARM)",
             os: macos-15,
             cc: "clang",
@@ -59,12 +66,12 @@ jobs:
             xcode_version: "16.4"
           }
         - {
-            name: "macOS 26 Xcode 26.5 (ARM)",
+            name: "macOS 26 Xcode 26.6 (ARM)",
             os: macos-26,
             cc: "clang",
             cxx: "clang++",
             generator: "Xcode",
-            xcode_version: "26.5"
+            xcode_version: "26.6"
           }
         build_type: [Debug, Release]
 
